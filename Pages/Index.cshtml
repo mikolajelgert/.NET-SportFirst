@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <div class="container">
+        <div class="image-container">
+            <div class="fade">
+                <img class="image-background" src="/lib/images/tennis_background.jpg" alt="tennis-background" />
+            </div>
+            <div class="fade">
+                <img class="image-background" src="/lib/images/squash_background.jpg" alt="squash_background" />
+            </div>
+            <div class="fade">
+                <img class="image-background" src="/lib/images/tableTennis_background.jpg" alt="tableTennis_background" />
+            </div>
+        </div>
+        <div class="main-header">
+            <p>Bored?</p>
+            <p>Wake up and be active!</p>
+            <a asp-page="/CustomPages/Calendar" class="btn btn-index-reserve">Reserve</a>
+        </div>
+    </div>
+</div>

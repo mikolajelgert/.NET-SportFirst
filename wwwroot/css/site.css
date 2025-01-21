@@ -1,0 +1,230 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem black;
+    border-color: black;
+}
+
+.btn:hover {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.btn {
+    border-radius: 15px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: white;
+    font-family: Bahnschrift;
+}
+
+/*Index css*/
+
+.btn-index-reserve {
+    border: solid 2px black;
+    background-color: white;
+}
+
+.container {
+    position: relative;
+}
+
+.image-container {
+    position: relative;
+    height: 50rem;
+    width: -webkit-fill-available;
+    overflow: hidden;
+}
+
+.fade {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 3s ease-in-out;
+}
+
+.image-background {
+    width: 100%;
+    height: 100%;
+}
+
+.fade:nth-child(1) {
+    animation: fadeAnimation 15s infinite;
+}
+
+.fade:nth-child(2) {
+    animation: fadeAnimation 15s infinite 5s;
+}
+
+.fade:nth-child(3) {
+    animation: fadeAnimation 15s infinite 10s;
+}
+
+@keyframes fadeAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    14% {
+        opacity: 1;
+    }
+
+    43% {
+        opacity: 1;
+    }
+
+    57% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }  
+}
+
+.main-header {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+}
+
+.main-header p:nth-of-type(2) {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+/*Calendar*/
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.sportType-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+.sport-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.week-toggle-form {
+    margin-left: auto;
+}
+
+.sportType-container label {
+    width: 200px;
+}
+
+.btn-week-change {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    padding: 8px 16px;
+}
+
+.btn-week-change:focus,
+.btn-week-change:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: 2px solid black;
+}
+
+.btn-week-change::after {
+    content: attr(data-hover-text);
+    display: none;
+}
+
+.btn-week-change:hover::after {
+    display: inline;
+}
+
+.btn-week-change:hover span {
+    display: none;
+}
+
+.sportType-picklist {
+    max-width: 200px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.calendar table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.calendar th, .calendar td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    width: 70px;
+    height: 60px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word; 
+    word-break: break-word; 
+}
+
+.calendar th {
+    white-space: normal; 
+    word-wrap: break-word;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+.available {
+    background-color: forestgreen !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.available:hover {
+    box-shadow: inset 0 0 5px black;
+}
+
+.notAvailable {
+    color: black !important;
+    pointer-events: none;
+}
+
+.past-slot {
+    background-color: transparent !important; 
+    color: transparent !important;
+    pointer-events: none; 
+    border: none;
+}

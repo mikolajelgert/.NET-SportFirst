@@ -1,0 +1,77 @@
+﻿@page
+@model SportFirst.Pages.CustomPages.CalendarModel
+@{
+	ViewData["Title"] = "Reserve";
+}
+
+<script>
+    function submitForm() {
+        document.getElementById("sportTypeSubmitButton").click();
+    }
+</script>
+
+<div class="main-container">
+    <div class="header-items">
+        <h2>Reservations Calendar</h2>
+        <div class="sportType-container">
+            <form method="post" class="sport-form">
+                    <label for="sport">Choose a sport:</label>
+                    <select asp-for="SelectedSport" asp-items="Model.SportOptions" class="form-control sportType-picklist" onchange="submitForm()">
+                    </select>
+                    <input type="hidden" asp-for="CurrentWeek" />
+                    <button type="submit" id="sportTypeSubmitButton" hidden></button>
+            </form>
+
+            <form method="post">
+                <input type="hidden" asp-for="SelectedSport" />
+                <input type="hidden" name="CurrentWeek" value="@(Model.CurrentWeek == 0 ? 1 : 0)" />
+                <button type="submit" asp-page-handler="ToggleWeek"
+                        class="btn btn-index-reserve btn-week-change"
+                        data-hover-text="@(Model.CurrentWeek == 0 ? "Next week" : "This week")">
+                    <span>@(Model.CurrentWeek == 0 ? "This week" : "Next week")</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    @if (Model.Days.Any()) 
+    {
+        <div class="calendar">
+            <table class="table table-bordered calendar-table">
+                <thead>
+                    <tr>
+                        <th>Hour</th>
+                        @for (int i = 0; i < Model.Days.Count; i++)
+                        {
+                            var day = Model.Days[i];
+                            <th class="week-column @(i >= 7 ? "week-2" : "")">@day.Day</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var slot in Model.Days.First().TimeSlots)
+                    {
+                        <tr>
+                            <td>@slot.Hour</td>
+                            @for (int i = 0; i < Model.Days.Count; i++)
+                            {
+                                var day = Model.Days[i];
+                                var daySlot = day.TimeSlots.FirstOrDefault(s => s.Hour == slot.Hour);
+
+                                <td class="week-column @(i >= 7 ? "week-2" : "") @(daySlot?.IsPast ?? false ? "past-slot" : (daySlot?.IsAvailable ?? false) ? "available" : "notAvailable")">
+                                    @if (!(daySlot?.IsPast ?? false))
+                                    {
+                                        @(daySlot?.IsAvailable ?? false ? "Reserve »" : "Taken")
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No available slots for the selected sport.</p>
+    }
+</div>
