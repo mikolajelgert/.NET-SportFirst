@@ -12,6 +12,9 @@ namespace SportFirst.Pages.CustomPages
 		public List<SelectListItem> SportOptions { get; set; }
 
         [BindProperty]
+        public Reservation Reservation { get; set; }
+
+        [BindProperty]
         public string SelectedSport { get; set; } = "tennis";
 
         [BindProperty]
@@ -22,18 +25,43 @@ namespace SportFirst.Pages.CustomPages
         private static Dictionary<string, List<DaySlot>> SportReservations { get; set; } = new();
         public List<DaySlot> Days => SportReservations.ContainsKey(SelectedSport)
             ? SportReservations[SelectedSport].Skip(CurrentWeek * 7).Take(7).ToList()
-            : new();
+            : GenerateCalendarSlots().Take(7).ToList();
 
         public void OnGet()
         {
-            LoadData();
+            if (string.IsNullOrEmpty(SelectedSport))
+            {
+                SelectedSport = "tennis";
+            }
+
+            InitializeSportOptions();
+
+            if (!SportReservations.ContainsKey(SelectedSport))
+            {
+                SportReservations[SelectedSport] = GenerateCalendarSlots();
+            }
         }
 
         public IActionResult OnPost()
         {
-            LoadData();
+            if (string.IsNullOrEmpty(SelectedSport))
+            {
+                SelectedSport = "tennis";
+            }
+
+            InitializeSportOptions();
+
+            if (!SportReservations.ContainsKey(SelectedSport))
+            {
+                SportReservations[SelectedSport] = GenerateCalendarSlots();
+            }
+
+            CurrentWeek = 0;
+            Reservation = null;
+
             return Page();
         }
+
 
         private void LoadData()
         {
@@ -47,6 +75,7 @@ namespace SportFirst.Pages.CustomPages
         public IActionResult OnPostToggleWeek(int currentWeek)
         {
             CurrentWeek = currentWeek;
+            Reservation = null;
             LoadData();
             return Page();
         }
@@ -57,7 +86,7 @@ namespace SportFirst.Pages.CustomPages
             {
                 new SelectListItem { Value = "tennis", Text = "Tennis", Selected = SelectedSport == "tennis" },
                 new SelectListItem { Value = "squash", Text = "Squash", Selected = SelectedSport == "squash" },
-                new SelectListItem { Value = "tableTennis", Text = "Table Tennis", Selected = SelectedSport == "tableTennis" }
+                new SelectListItem { Value = "table tennis", Text = "Table Tennis", Selected = SelectedSport == "tableTennis" }
             };
         }
 
@@ -88,6 +117,52 @@ namespace SportFirst.Pages.CustomPages
                 days.Add(new DaySlot { Day = displayDate, TimeSlots = slots });
             }
             return days;
+        }
+
+        public IActionResult OnPostOpenReservation(string SelectedDateTime, string SelectedSport)
+        {
+            if (!string.IsNullOrEmpty(SelectedSport))
+            {
+                this.SelectedSport = SelectedSport;
+            }
+
+            if (!string.IsNullOrEmpty(SelectedDateTime))
+            {
+                try
+                {
+                    DateTime parsedDateTime = DateTime.ParseExact(
+                        SelectedDateTime, "ddd, dd MMM yyyy HH:mm",
+                        new System.Globalization.CultureInfo("en-US")
+                    );
+
+                    Reservation = new Reservation
+                    {
+                        ReservationDateTime = parsedDateTime,
+                        SelectedSport = SelectedSport
+                    };
+                }
+                catch (FormatException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ERROR] Date Parsing Failed: {ex.Message}");
+                    Reservation = null;
+                }
+            }
+
+            InitializeSportOptions();
+            return Page();
+        }
+
+        public IActionResult OnPostCloseReservation(string SelectedSport)
+        {
+            if (!string.IsNullOrEmpty(SelectedSport))
+            {
+                this.SelectedSport = SelectedSport;
+            }
+
+            Reservation = null;
+            InitializeSportOptions();
+
+            return Page();
         }
     }
 }

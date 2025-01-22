@@ -28,3 +28,4 @@ C:\Users\maikPC\source\repos\lab1Poprawka.net\SportFirst\obj\Debug\net8.0\refint
 C:\Users\maikPC\source\repos\lab1Poprawka.net\SportFirst\obj\Debug\net8.0\SportFirst.pdb
 C:\Users\maikPC\source\repos\lab1Poprawka.net\SportFirst\obj\Debug\net8.0\SportFirst.genruntimeconfig.cache
 C:\Users\maikPC\source\repos\lab1Poprawka.net\SportFirst\obj\Debug\net8.0\ref\SportFirst.dll
+C:\Users\maikPC\source\repos\lab1Poprawka.net\SportFirst\obj\Debug\net8.0\SportFirst.sourcelink.json

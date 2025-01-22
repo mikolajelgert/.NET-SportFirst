@@ -1,0 +1,43 @@
+﻿@model SportFirst.Models.Reservation
+
+@if (Model != null && Model.ReservationDateTime != default(DateTime))
+{
+    <div class="reservation-container">
+        <form method="post">
+            <div class="create-inputs-container">
+                <h5>Reservation Details</h5>
+                <div class="date-details">
+                    <p>@Model.SelectedSport.ToUpper() - @Model.ReservationDateTime.ToString("dddd", new System.Globalization.CultureInfo("en-US"))</p>
+                    <p>@Model.ReservationDateTime.ToString("dd MMM yy,  HH:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                </div>
+                <input type="hidden" asp-for="ReservationDateTime" />
+
+                <div class="create-input-email">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="text" class="form-control" />
+                </div>
+                <div class="create-input-second-row">
+                    <div>
+                        <label asp-for="Name">Name</label>
+                        <input asp-for="Name" type="text" class="form-control" />
+                    </div>
+                    <div>
+                        <label asp-for="Surname">Surname</label>
+                        <input asp-for="Surname" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="create-input-buttons">
+                    <button type="submit" class="btn btn-add-song">Reserve</button>
+                    <form method="post">
+                        <input type="hidden" name="SelectedSport" value="@Model.SelectedSport" />
+                        <button type="submit" asp-page-handler="CloseReservation" class="btn btn-back-to-list">Close</button>
+                    </form>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+
+
+
