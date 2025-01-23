@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SportFirst.Data;
 using SportFirst.Models;
 
 namespace SportFirst.Pages.CustomPages
@@ -10,6 +11,13 @@ namespace SportFirst.Pages.CustomPages
     public class CalendarModel : PageModel
     {
 		public List<SelectListItem> SportOptions { get; set; }
+
+        private readonly ApplicationDBContext _db;
+
+        public CalendarModel(ApplicationDBContext db)
+        {
+            _db = db;
+        }
 
         [BindProperty]
         public Reservation Reservation { get; set; }
@@ -33,6 +41,7 @@ namespace SportFirst.Pages.CustomPages
             {
                 SelectedSport = "tennis";
             }
+            ModelState.Clear();
 
             InitializeSportOptions();
 
@@ -126,6 +135,8 @@ namespace SportFirst.Pages.CustomPages
                 this.SelectedSport = SelectedSport;
             }
 
+            ModelState.Clear();
+
             if (!string.IsNullOrEmpty(SelectedDateTime))
             {
                 try
@@ -163,6 +174,28 @@ namespace SportFirst.Pages.CustomPages
             InitializeSportOptions();
 
             return Page();
+        }
+
+        public IActionResult OnPostReserve()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            try
+            {
+                _db.Reservations.Add(Reservation);
+                _db.SaveChanges();
+
+                return RedirectToPage("/CustomPages/Calendar");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Database Save Error: {ex.Message}");
+                TempData["ErrorMessage"] = "Error saving reservation. Please try again.";
+                return Page();
+            }
         }
     }
 }

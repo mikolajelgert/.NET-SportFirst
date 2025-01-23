@@ -1,36 +1,51 @@
 ﻿@model SportFirst.Models.Reservation
 
+<script>
+    function storeReservedSlot() {
+        let selectedTd = sessionStorage.getItem("selectedTd");
+
+        if (selectedTd) {
+            sessionStorage.setItem("reservedTd", selectedTd);
+        }
+    }
+</script>
 @if (Model != null && Model.ReservationDateTime != default(DateTime))
 {
     <div class="reservation-container">
-        <form method="post">
+        <form method="post" asp-page-handler="Reserve" novalidate>
             <div class="create-inputs-container">
                 <h5>Reservation Details</h5>
                 <div class="date-details">
                     <p>@Model.SelectedSport.ToUpper() - @Model.ReservationDateTime.ToString("dddd", new System.Globalization.CultureInfo("en-US"))</p>
-                    <p>@Model.ReservationDateTime.ToString("dd MMM yy,  HH:mm", new System.Globalization.CultureInfo("en-US"))</p>
+                    <p>@Model.ReservationDateTime.ToString("dd MMM yyyy,  HH:mm", new System.Globalization.CultureInfo("en-US"))</p>
                 </div>
                 <input type="hidden" asp-for="ReservationDateTime" />
+                <input type="hidden" asp-for="SelectedSport" />
 
                 <div class="create-input-email">
                     <label asp-for="Email">Email</label>
                     <input asp-for="Email" type="text" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="create-input-second-row">
                     <div>
                         <label asp-for="Name">Name</label>
                         <input asp-for="Name" type="text" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div>
                         <label asp-for="Surname">Surname</label>
                         <input asp-for="Surname" type="text" class="form-control" />
+                        <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="create-input-buttons">
-                    <button type="submit" class="btn btn-add-song">Reserve</button>
+                    <button type="submit" class="btn" onclick="storeReservedSlot()">
+                        Reserve
+                    </button>
                     <form method="post">
                         <input type="hidden" name="SelectedSport" value="@Model.SelectedSport" />
-                        <button type="submit" asp-page-handler="CloseReservation" class="btn btn-back-to-list">Close</button>
+                        <button type="submit" asp-page-handler="CloseReservation" class="btn">Close</button>
                     </form>
                 </div>
             </div>

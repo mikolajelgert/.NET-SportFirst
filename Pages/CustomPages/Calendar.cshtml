@@ -8,6 +8,26 @@
     function submitForm() {
         document.getElementById("sportTypeSubmitButton").click();
     }
+
+    function storeClickedTd(formElement) {
+        let td = formElement.closest("td");
+        let tdSelector = `td[data-slot-id='${td.dataset.slotId}']`;
+
+        sessionStorage.setItem("selectedTd", tdSelector);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let reservedTd = sessionStorage.getItem("reservedTd");
+        if (reservedTd) {
+            let td = document.querySelector(reservedTd);
+            if (td) {
+                td.classList.remove("available");
+                td.classList.add("notAvailable");
+                td.innerHTML = "Taken";
+            }
+            sessionStorage.removeItem("reservedTd");
+        }
+    });
 </script>
 
 <div class="main-container">
@@ -62,12 +82,13 @@
                                 var day = Model.Days[i];
                                 var daySlot = day.TimeSlots.FirstOrDefault(s => s.Hour == slot.Hour);
 
-                                <td class="week-column @(i >= 7 ? "week-2" : "") @(daySlot?.IsPast ?? false ? "past-slot" : (daySlot?.IsAvailable ?? false) ? "available" : "notAvailable")">
+                                <td class="week-column @(i >= 7 ? "week-2" : "") @(daySlot?.IsPast ?? false ? "past-slot" : (daySlot?.IsAvailable ?? false) ? "available" : "notAvailable")"
+                                    data-slot-id="@day.Day.Replace(" ", "")@slot.Hour.Replace(":", "")">
                                     @if (!(daySlot?.IsPast ?? false))
                                     {
                                         @if (daySlot?.IsAvailable ?? false)
                                         {
-                                            <form method="post">
+                                            <form method="post" onsubmit="storeClickedTd(this)">
                                                 <input type="hidden" name="SelectedDateTime" value="@($"{day.Day} {DateTime.Today.Year} {slot.Hour}")" />
                                                 <input type="hidden" asp-for="SelectedSport" /> 
                                                 <button type="submit" asp-page-handler="OpenReservation" class="btn btn-reserve">
